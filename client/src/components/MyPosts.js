@@ -1,17 +1,16 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {Card, Divider, Image } from 'semantic-ui-react'
 
-export default class MyPosts extends Component {
-  state = {posts: [] }
+const MyPosts = (props) =>  {
+  const [posts, setPost] = useState('');
 
-  componentDidMount(){
+  useEffect(() => {
     axios.get('/api/posts')
-    .then( res => this.setState({ posts: res.data}) )
-  }
+    .then( res => setPost({ posts: res.data}) )
+  }, []
+  )
 
-  render() {
-    const {posts} = this.state
     return(
       <Card.Group itemsPerRow={1}>
         {posts.map( post =>
@@ -26,5 +25,6 @@ export default class MyPosts extends Component {
           )}
       </Card.Group>
     )
-  }
 }
+
+export default MyPosts

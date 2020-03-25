@@ -1,68 +1,69 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Header, Segment, Form, Button} from 'semantic-ui-react'
 import axios from 'axios'
 
-class EditPostForm extends React.Component {
-  defaultValues = {    
-    user_id: this.props.match.params.user_id,
+const EditPostForm = (props) => {
+  const defaultValues = {    
+    user_id: props.match.params.user_id,
     body: '',
     date: '',
   }
-  state = {...this.defaultValues}
+  
+  const [post, setPost] = useState({...defaultValues})
+  const {user} = props
 
-  handleChange = e => {
+  const handleChange = e => {
     const { name, value } = e.target
-    const  { user } = this.props
-    this.setState({
+    setPost({
       [name]: value,
       date: new Date()
     })
   }
 
-  handleSubmit = e => {
-    const post = {...this.state}
+  const handleSubmit = e => {
+  
     e.preventDefault()
-    axios.put(`../../api/posts/${this.props.match.params.id}`, post).then(res => {
-      this.setState({ ...this.defaultValues });
+    axios.put(`../../api/posts/${props.match.params.id}`, post).then(res => {
+      setPost({ ...defaultValues });
     }).catch( (err) => {
       console.log(err.response)
     })
   }
 
-  getPost(){
-    axios.get(`../../api/posts/${this.props.match.params.id}`).then(res=>
-        this.setState({
+  const getPost = () => {
+    axios.get(`../../api/posts/${props.match.params.id}`).then(res=>
+        setPost({
           body: res.data.body
         })
       )
   }
 
-  render() {
-    if(this.state.body === ''){
-      this.getPost()
+
+    if(post.body === ''){
+      getPost()
     }
     return (
       <Segment style={{ margin: '0' }}>
         <Header as='h3'>Edit Post</Header>
         <div>
           <div style={{ margin: '0', padding: '0 0 0 1%', display: 'inline-block', width: '85%' }}>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={handleSubmit}>
               <Form.Input
                 placeholder='Write Your Post Here...'
                 fluid
                 name='body'
-                value={this.state.body}
-                onChange={this.handleChange}
+                value={post.body}
+                onChange={handleChange}
               />
             </Form>
           </div>
           <div style={{display:'inline-block', width:'8%', marginLeft:'2%'}}>
-              <Button onClick={this.handleSubmit}>Update</Button>
+              <Button onClick={handleSubmit}>Update</Button>
           </div>
         </div>
       </Segment>
     )
-  }
+  
 }
 
 export default EditPostForm

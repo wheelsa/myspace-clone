@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, } from 'react'
 import {Segment} from 'semantic-ui-react'
 import { AuthConsumer } from '../providers/AuthProvider'
 import PostForm from './PostForm'
@@ -6,28 +6,25 @@ import Axios from 'axios'
 import Avatar from 'react-avatar';
 import { Link } from 'react-router-dom';
 
-class Home extends React.Component {
-  state = { posts: [], users: [] }
+const Home = (props) => {
+  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
 
-  componentDidMount() {
-    Axios.get(`api/posts`).then(res => this.setState({ posts: res.data })).catch(e => console.log(e))
-    Axios.get('/users').then(res => this.setState({ users: res.data })).catch(e => console.log(e))
-  }
+  useEffect(() => {
+    Axios.get(`api/posts`).then(res => setPosts( res.data )).catch(e => console.log(e))
+    Axios.get('/users').then(res => setUsers( res.data )).catch(e => console.log(e))
+  },[]
+  ) 
+  const getUser = (id) => (
+      users.filter(p => p.id === id))
+  
 
-  getUser = (id) => {
-    const { users } = this.state
-    return (
-      users.filter(p => p.id === id)
-    )
-  }
-
-  allPosts = () => {
-    const { posts } = this.state
+  const allPosts = () => {
     var shA = shuffleArray(posts)
     var postStuff = ''
     if (posts.length > 0) {
       postStuff = posts.map((p) => {
-        var userArray = this.getUser(p.user_id)
+        var userArray = getUser(p.user_id)
         var user = userArray[0]
         return (
           <Segment key={`post-${p.id}`}>
@@ -50,17 +47,17 @@ class Home extends React.Component {
     return (postStuff)
   }
 
-  render() {
-    const { auth: { user } } = this.props
+  const { user } = props.auth
+  
     return (
       <>
         <PostForm user={user} />
         <Segment>
-          {this.allPosts()}
+          {allPosts()}
         </Segment>
       </>
     );
-  }
+  
 }
 
 const ConnectedHome = (props) => {
