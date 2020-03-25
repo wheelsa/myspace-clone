@@ -1,0 +1,15 @@
+AllCops:
+
+  TargetRubyVersion: 2.6 
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'node_modules/**/*'
+    - 'config/spring.rb'
+    - Style/HashEachMethods
+    - Style/HashTransformKeys
+    - style/HashTransformValues
+
+Bundler/OrderedGems:
+  Exclude:
+    - 'Gemfile'

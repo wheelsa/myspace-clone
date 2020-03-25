@@ -1,0 +1,24 @@
+
+Some current unresolved issues 
+  - Have not worked on getting the pages to refresh automatically when:
+    -Creating a Post
+    -Editing a Post(stays on the EditPostForm page)
+    -Deleting a Post
+    -Possibly other functions
+
+  -Refreshing too much on ShowOtherUser and ShowUser Page will through an error
+   when going to the Home page (MyZone on the NavBar)
+
+    error:
+      -Cannot read property 'nickname' of undefined
+  
+    The error will (ironically) go away when refreshing the page. Im not sure why it does that
+
+  -The search Bar does not do anything. Planned on figuring out how to make that work
+
+  -Friend Model is made but button and method needs to be made to add Friend
+
+  -Likes have not been made
+
+  -All CRUD actions for user is not done
+
